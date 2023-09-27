@@ -1,0 +1,23 @@
+---
+name: Checks
+
+on: [push]
+
+jobs:
+  test-lint:
+    name: Test and lint
+    runs-on: ubuntu-20.04 #el sistema operativo en el que github va a correr
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{secrets.DOCKERHUB_USER}}
+          password: ${{secrets.DOCKERHUB_TOEKN}}
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Test
+        run: docker-compose run --rm app sh -c "python manage.py test"
+      - name: Lint
+        run: docker-compose run --rm app sh -c "flake8"
+#no importa el nombre solo que este dentro de esa direccion
+
